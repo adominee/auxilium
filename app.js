@@ -7,6 +7,33 @@ var helmet=require('helmet');
 var session=require('express-session');
 var passport=require('passport');
 
+var User=require('./models/user');
+var Record=require('./models/record');
+var Reference=require('./models/reference');
+var Subject=require('./models/subject');
+var Color=require('./models/color');
+var Goal=require('./models/goal');
+User.sync().then(()=>{
+  Color.sync().then(async ()=>{
+    Subject.belongsTo(Color,{foreignKey:'colorId'});
+    Subject.belongsTo(User,{foreignKey:'userId'});
+    Goal.belongsTo(User,{foreignKey:'userId'});
+    await Subject.sync();
+    await Goal.sync();
+  })
+  .then(async ()=>{
+    Reference.belongsTo(User,{foreignKey:'userId'});
+    Reference.belongsTo(Goal,{foreignKey:'goalId'});
+    await Reference.sync();
+  })
+  .then(()=>{
+    Record.belongsTo(User,{foreignKey:'userId'});
+    Record.belongsTo(Reference,{foreignKey:'referenceId'});
+    Record.belongsTo(Subject,{foreignKey:'subjectId'});
+    Record.sync();
+  })
+})
+
 var GitHubStrategy=require('passport-github2').Strategy;
 var GITHUB_CLIENT_ID=process.env.GITHUB_CLIENT_ID;
 var GITHUB_CLIENT_SECRET=process.env.GITHUB_CLIENT_SECRET;
