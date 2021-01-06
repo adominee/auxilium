@@ -1,3 +1,4 @@
+//モジュールのインポート
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,12 +8,14 @@ var helmet=require('helmet');
 var session=require('express-session');
 var passport=require('passport');
 
+//データモデルのインポート
 var User=require('./models/user');
 var Record=require('./models/record');
 var Reference=require('./models/reference');
 var Subject=require('./models/subject');
 var Color=require('./models/color');
 var Goal=require('./models/goal');
+//リレーションの作成
 User.sync().then(()=>{
   Color.sync().then(async ()=>{
     Subject.belongsTo(Color,{foreignKey:'colorId'});
@@ -34,6 +37,7 @@ User.sync().then(()=>{
   })
 })
 
+//GitHubを利用した外部認証
 var GitHubStrategy=require('passport-github2').Strategy;
 var GITHUB_CLIENT_ID=process.env.GITHUB_CLIENT_ID;
 var GITHUB_CLIENT_SECRET=process.env.GITHUB_CLIENT_SECRET;
@@ -53,15 +57,20 @@ passport.use(new GitHubStrategy({
   callbackURL:'http://localhost:8000/auth/github/callback'
 },
   (accessToken,refreshToken,profile,done)=>{
-    process.nextTick(()=>{
-      return done(null,profile);
-    })
+    User.upsert({
+      userId:profile.id,
+      username:profile.username
+    }).then(()=>{
+      done(null,profile);
+    });
   }
 ))
 
+//Routerのimport
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var logoutRouter=require('./routes/logout');
+var referenceRouter=require('./routes/reference');
 const { access } = require('fs');
 
 var app = express();
@@ -84,14 +93,16 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/logout',logoutRouter);
+app.use('/reference',referenceRouter);
 
+//GitHubを利用したログイン処理
 app.get('/auth/github',
   passport.authenticate('github',{scope:['user:email']}),
   (req,res)=>{
 
   }
 )
-
+//callbackの処理
 app.get('/auth/github/callback',
   passport.authenticate('github',{failiureRedirect:'/login'}),
   (req,res)=>{

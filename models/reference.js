@@ -12,11 +12,16 @@ const Reference=loader.database.define(
     },
     userId:{
       type:Sequelize.INTEGER,
+      primaryKey:true,
       allowNull:false
     },
     referenceName:{
       type:Sequelize.STRING,
       allowNull:false
+    },
+    referenceNumber:{
+      type:Sequelize.INTEGER,
+      allowNull:true
     },
     subjectId:{
       type:Sequelize.INTEGER,
