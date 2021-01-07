@@ -8,6 +8,7 @@ const Goal=loader.database.define(
     goalId:{
       type:Sequelize.INTEGER,
       primaryKey:true,
+      autoIncrement:true,
       allowNull:false
     },
     userId:{

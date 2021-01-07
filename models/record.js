@@ -8,6 +8,7 @@ const Record=loader.database.define(
     recordId:{
       type:Sequelize.INTEGER,
       primaryKey:true,
+      autoIncrement:true,
       allowNull:false
     },
     userId:{

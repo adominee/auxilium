@@ -8,6 +8,7 @@ const Subject=loader.database.define(
     subjectId:{
       type:Sequelize.INTEGER,
       primaryKey:true,
+      autoIncrement:true,
       allowNull:false
     },
     userId:{

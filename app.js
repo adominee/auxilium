@@ -71,6 +71,7 @@ var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var logoutRouter=require('./routes/logout');
 var referenceRouter=require('./routes/reference');
+var goalRouter=require('./routes/goal');
 const { access } = require('fs');
 
 var app = express();
@@ -94,6 +95,7 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/logout',logoutRouter);
 app.use('/reference',referenceRouter);
+app.use('/goal',goalRouter);
 
 //GitHubを利用したログイン処理
 app.get('/auth/github',

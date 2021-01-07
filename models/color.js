@@ -8,6 +8,7 @@ const Color=loader.database.define(
     colorId:{
       type:Sequelize.INTEGER,
       primaryKey:true,
+      autoIncrement:true,
       allowNull:false
     },
     colorCode:{
