@@ -5,6 +5,10 @@ block content
   p Welcome to #{title}
   div
     if user
-      a(href="/logout") #{user.username} をログアウト
+      div
+        a(href="/logout") #{user.username} をログアウト
+        br
+        a(href="/goal/table") 目標一覧
     else
-      a(href="/login") ログイン
+      div
+        a(href="/login") ログイン
