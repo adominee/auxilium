@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  form(action="/subject", method="post")
+    div
+      h5 教科名
+      input(type="text", name="subjectName")
+    div
+      h5 教科の色
+      input(type="color", name="subjectColor")
+    button(type="submit") 教科を追加

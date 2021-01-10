@@ -66,13 +66,15 @@ passport.use(new GitHubStrategy({
   }
 ))
 
-//Routerのimport
+//Router Import
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var logoutRouter=require('./routes/logout');
 var referenceRouter=require('./routes/reference');
+var subjectRouter=require('./routes/subject');
 var goalRouter=require('./routes/goal');
 const { access } = require('fs');
+const { sub } = require('date-fns');
 
 var app = express();
 app.use(helmet());
@@ -91,18 +93,18 @@ app.use(session({secret:SESSION_SECRET,resave:false,saveUninitialized:false}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+//Router Settings
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/logout',logoutRouter);
 app.use('/reference',referenceRouter);
+app.use('/subject',subjectRouter);
 app.use('/goal',goalRouter);
 
 //GitHubを利用したログイン処理
 app.get('/auth/github',
   passport.authenticate('github',{scope:['user:email']}),
-  (req,res)=>{
-
-  }
+  (req,res)=>{}
 )
 //callbackの処理
 app.get('/auth/github/callback',

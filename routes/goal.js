@@ -1,11 +1,11 @@
 'use strict';
 
 const express=require('express');
+const authenticationEnsurer=require('./authentication-ensurer');
 const format=require('date-fns/format');
 const ja=require('date-fns/locale/ja');
 
 const router=express.Router();
-const authenticationEnsurer=require('./authentication-ensurer');
 
 //データモデルのimport
 const Goal=require('../models/goal');
