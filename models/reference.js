@@ -6,9 +6,8 @@ const Reference=loader.database.define(
   'reference',
   {
     referenceId:{
-      type:Sequelize.INTEGER,
+      type:Sequelize.UUID,
       primaryKey:true,
-      autoIncrement:true,
       allowNull:false
     },
     userId:{
@@ -29,7 +28,7 @@ const Reference=loader.database.define(
       allowNull:true
     },
     goalId:{
-      type:Sequelize.INTEGER,
+      type:Sequelize.UUID,
       allowNull:true
     }
   }

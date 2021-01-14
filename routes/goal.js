@@ -2,6 +2,7 @@
 
 const express=require('express');
 const authenticationEnsurer=require('./authentication-ensurer');
+const uuid=require('uuid')
 const format=require('date-fns/format');
 const ja=require('date-fns/locale/ja');
 
@@ -24,7 +25,7 @@ router.get('/table',authenticationEnsurer,(req,res,next)=>{
       },
       order:[['goalId','DESC']]
     }).then(goals=>{
-      res.render('table-goal',{
+      res.render('goal-table',{
         title:title,
         user:req.user,
         goals:goals
@@ -58,7 +59,9 @@ router.get('/:goalId',authenticationEnsurer,(req,res,next)=>{
 
 //目標のDB保存
 router.post('/',authenticationEnsurer,(req,res,next)=>{
+  const goalId=uuid.v4();
   Goal.create({
+    goalId:goalId,
     userId:req.user.id,
     deadline:req.body.deadline,
     goalName:req.body.goalName.slice(0,255) || '(名称未設定)',

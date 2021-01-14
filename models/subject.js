@@ -6,9 +6,8 @@ const Subject=loader.database.define(
   'Subject',
   {
     subjectId:{
-      type:Sequelize.INTEGER,
+      type:Sequelize.UUID,
       primaryKey:true,
-      autoIncrement:true,
       allowNull:false
     },
     userId:{
@@ -19,9 +18,9 @@ const Subject=loader.database.define(
       type:Sequelize.STRING,
       allowNull:false
     },
-    colorId:{
-      type:Sequelize.INTEGER,
-      allowNull:true
+    colorCode:{
+      type:Sequelize.STRING,
+      allowNull:null
     }
   }
 );

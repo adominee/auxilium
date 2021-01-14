@@ -17,7 +17,7 @@ const User=loader.database.define(
   },
   {
     freezeTableName:true,
-    timeswtamps:false
+    timestamps:false
   }
 );
 

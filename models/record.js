@@ -6,9 +6,8 @@ const Record=loader.database.define(
   'record',
   {
     recordId:{
-      type:Sequelize.INTEGER,
+      type:Sequelize.UUID,
       primaryKey:true,
-      autoIncrement:true,
       allowNull:false
     },
     userId:{
@@ -21,10 +20,10 @@ const Record=loader.database.define(
       allowNull:false
     },
     referenceId:{
-      type:Sequelize.INTEGER,
+      type:Sequelize.UUID,
       allowNull:false
     },
-    mome:{
+    memo:{
       type:Sequelize.STRING,
       allowNull:true
     },
@@ -36,7 +35,7 @@ const Record=loader.database.define(
       type:Sequelize.INTEGER,
       allowNull:true
     },
-    createdAt:{
+    recordedAt:{
       type:Sequelize.DATE,
       allowNull:false
     }
