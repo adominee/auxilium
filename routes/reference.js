@@ -6,9 +6,20 @@ const authenticationEnsurer=require('./authentication-ensurer');
 
 //データモデルのimport
 const Reference=require('../models/reference');
+const Subject=require('../models/subject');
+const Goal=require('../models/goal');
 
 router.get('/new',authenticationEnsurer,(req,res,next)=>{
-  res.render('new-reference',{user:req.user});
+  Subject.findAll({
+    where:{
+      userId:req.user.id
+    }
+  }).then(subjects=>{
+    res.render('new-reference',{
+      user:req.user,
+      subjects:subjects,
+    })
+  })
 });
 
 //参考書のDB保存
