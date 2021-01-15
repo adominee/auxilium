@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  if user
+      div
+        a(href="/logout") #{user.username} をログアウト
+      div
+        a(href="/subject/new") 目標を作る
+      - var hasSubject=subjects.length>0
+      if hasSubject
+        h3 目標一覧
+        table.table
+          tr
+            th 目標名
+            th 締切日
+          each subject in subjects
+            tr
+              td
+                a(href=`/subject/${subject.subjectId}`) #{subject.subjectName}
+  else
+    div
+      a(href="/login") ログイン

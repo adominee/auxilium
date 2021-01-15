@@ -23,7 +23,7 @@ router.get('/table',authenticationEnsurer,(req,res,next)=>{
       where:{
         userId:req.user.id
       },
-      order:[['goalId','DESC']]
+      order:['goalId','DESC']
     }).then(goals=>{
       res.render('goal-table',{
         title:title,
@@ -32,7 +32,7 @@ router.get('/table',authenticationEnsurer,(req,res,next)=>{
       });
     });
   }else{
-    res.render('table-goal',{title:title,user:req.user});
+    res.render('goal-table',{title:title,user:req.user});
   }
 })
 
@@ -44,7 +44,7 @@ router.get('/:goalId',authenticationEnsurer,(req,res,next)=>{
     where:{
       goalId:req.params.goalId
     }
-  }).then((goal)=>{
+  }).then(goal=>{
     if(goal){
       res.render('goal',{
         goal:goal,
