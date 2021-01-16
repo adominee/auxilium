@@ -4,17 +4,15 @@ block content
   form(action="/reference", method="post")
     div
       h5 参考書名
-      input(type="text", name="referenceName")
+      input(type="text", name="referenceName" required)
     div
       h5 問題数・ページ数
       input(type="number", name="referenceNumber", min="1",max="2147483648")
     div
       h5 教科
-      if subjects.length>0
-        each subject in subjects
-          p #{subject.subjectName}
-          input(type="radio", name="subjectChoice" value=subject.subjectName)
-      else
-        p 未分類
-        input(type="radio", name="subjectChoice" value="未分類")
+      each subject in subjects
+        p #{subject.subjectName}
+        input(type="radio", name="subjectChoice" value=subject.subjectName)
+      p 未分類
+      input(type="radio", name="subjectChoice" value="未分類")
     button(type="submit") 参考書を追加

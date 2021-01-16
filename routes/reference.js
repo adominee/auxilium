@@ -1,14 +1,17 @@
 'use strict';
 
 const express=require('express');
-const router=express.Router();
 const authenticationEnsurer=require('./authentication-ensurer');
+const uuid=require('uuid');
+
+const router=express.Router();
 
 //データモデルのimport
 const Reference=require('../models/reference');
 const Subject=require('../models/subject');
 const Goal=require('../models/goal');
 
+//参考書の新規追加
 router.get('/new',authenticationEnsurer,(req,res,next)=>{
   Subject.findAll({
     where:{
@@ -22,10 +25,24 @@ router.get('/new',authenticationEnsurer,(req,res,next)=>{
   })
 });
 
+//参考書の一覧表示
+router.get('/table',authenticationEnsurer,(req,res,next)=>{
+  res.render('reference-table',{
+    user:req.user
+  });
+})
+
 //参考書のDB保存
 router.post('/',authenticationEnsurer,(req,res,next)=>{
-  console.log(req.body);//TODO 参考書を保存する処理
-  res.redirect('/');
+  const referenceId=uuid.v4();
+  Reference.create({
+    referenceId:referenceId,
+    userId:req.user.id,
+    referenceName:req.body.referenceName,
+    referenceNumber:req.body.referenceNumber
+  }).then((reference)=>{
+    res.redirect('/');
+  })
 });
 
 module.exports=router;

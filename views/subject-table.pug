@@ -5,14 +5,13 @@ block content
       div
         a(href="/logout") #{user.username} をログアウト
       div
-        a(href="/subject/new") 目標を作る
+        a(href="/subject/new") 教科を追加する
       - var hasSubject=subjects.length>0
       if hasSubject
-        h3 目標一覧
+        h3 教科一覧
         table.table
           tr
-            th 目標名
-            th 締切日
+            th 教科名
           each subject in subjects
             tr
               td

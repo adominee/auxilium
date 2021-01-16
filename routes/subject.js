@@ -51,8 +51,8 @@ router.get('/:subjectId',authenticationEnsurer,(req,res,next)=>{
   })
 })
 
+//教科のDB保存
 router.post('/',authenticationEnsurer,(req,res,next)=>{
-  console.log(req.body);
   const subjectId=uuid.v4();
   Subject.create({
     subjectId:subjectId,

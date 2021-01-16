@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  if user
+      div
+        a(href="/logout") #{user.username} をログアウト
+      div
+        a(href="/reference/new") 参考書を追加する
+  else
+    div
+      a(href="/login") ログイン
