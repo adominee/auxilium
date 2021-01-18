@@ -16,26 +16,19 @@ var Subject=require('./models/subject');
 var Color=require('./models/color');
 var Goal=require('./models/goal');
 //リレーションの作成
-User.sync().then(()=>{
-  Color.sync().then(async ()=>{
-    Subject.belongsTo(Color,{foreignKey:'colorId'});
+User.sync().then(async ()=>{
     Subject.belongsTo(User,{foreignKey:'userId'});
     Goal.belongsTo(User,{foreignKey:'userId'});
     await Subject.sync();
     await Goal.sync();
-  })
-  .then(async ()=>{
     Reference.belongsTo(User,{foreignKey:'userId'});
-    Reference.belongsTo(Goal,{foreignKey:'goalId'});
+    Reference.belongsTo(Subject,{foreignKey:'subjectId'});
     await Reference.sync();
-  })
-  .then(()=>{
     Record.belongsTo(User,{foreignKey:'userId'});
     Record.belongsTo(Reference,{foreignKey:'referenceId'});
     Record.belongsTo(Subject,{foreignKey:'subjectId'});
     Record.sync();
-  })
-})
+});
 
 //GitHubを利用した外部認証
 var GitHubStrategy=require('passport-github2').Strategy;

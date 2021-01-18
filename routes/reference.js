@@ -27,9 +27,33 @@ router.get('/new',authenticationEnsurer,(req,res,next)=>{
 
 //参考書の一覧表示
 router.get('/table',authenticationEnsurer,(req,res,next)=>{
-  res.render('reference-table',{
-    user:req.user
-  });
+  if(req.user){
+    Reference.findAll({
+      where:{
+        userId:req.user.id
+      }
+    }).then(references=>{
+      res.render('reference-table',{
+        user:req.user,
+        references:references
+      });
+    });
+  }
+});
+
+//参考書の個別表示
+router.get('/:referenceId',authenticationEnsurer,(req,res,next)=>{
+  Reference.findOne({
+    referenceId:req.params.referenceId
+  }).then(reference=>{
+    if(reference){
+      res.render('reference',{user:req.user,reference:reference});
+    }else{
+      const err=new Error('指定された目標は存在しません');
+      err.status=404;
+      next(err);
+    }
+  })
 })
 
 //参考書のDB保存

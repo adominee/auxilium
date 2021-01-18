@@ -16,7 +16,6 @@ router.get('/new',authenticationEnsurer,(req,res,next)=>{
 
 //教科の一覧表示
 router.get('/table',authenticationEnsurer,(req,res,next)=>{
-  const title='Auxilium';
   if(req.user){
     Subject.findAll({
       where:{
@@ -24,13 +23,12 @@ router.get('/table',authenticationEnsurer,(req,res,next)=>{
       }
     }).then(subjects=>{
       res.render('subject-table',{
-        title:title,
         user:req.user,
         subjects:subjects
       })
     })
   }else{
-    res.render('subject-table',{title:title,user:req.user});
+    res.render('subject-table',{user:req.user});
   }
 })
 
@@ -60,8 +58,7 @@ router.post('/',authenticationEnsurer,(req,res,next)=>{
     subjectName:req.body.subjectName,
     colorCode:req.body.subjectColor
   }).then((subject)=>{
-    res.redirect('/');
-    //res.redirect('/subject/'+subject.subjectId);
+    res.redirect('/subject/'+subject.subjectId);
   })
 })
 
