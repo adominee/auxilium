@@ -8,11 +8,13 @@ block content
       div
         a(href="/logout") #{user.username} をログアウト
         br
-        a(href="/goal/table") 目標一覧
+        a(href="/record/table") 記録一覧
+        br
+        a(href="/reference/table") 参考書一覧
         br
         a(href="/subject/table") 教科一覧
         br
-        a(href="/reference/table") 参考書一覧
+        a(href="/goal/table") 目標一覧
     else
       div
         a(href="/login") ログイン

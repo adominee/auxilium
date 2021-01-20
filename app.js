@@ -64,6 +64,7 @@ passport.use(new GitHubStrategy({
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var logoutRouter=require('./routes/logout');
+var recordRouter=require('./routes/record');
 var referenceRouter=require('./routes/reference');
 var subjectRouter=require('./routes/subject');
 var goalRouter=require('./routes/goal');
@@ -91,6 +92,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/logout',logoutRouter);
+app.use('/record',recordRouter);
 app.use('/reference',referenceRouter);
 app.use('/subject',subjectRouter);
 app.use('/goal',goalRouter);

@@ -21,7 +21,7 @@ const Record=loader.database.define(
     },
     referenceId:{
       type:Sequelize.UUID,
-      allowNull:false
+      allowNull:true
     },
     memo:{
       type:Sequelize.STRING,

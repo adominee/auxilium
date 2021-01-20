@@ -5,6 +5,7 @@ const passportStub=require('passport-stub');
 const User = require('../models/user');
 const Goal = require('../models/goal');
 
+//ログインのテスト
 describe('/login',()=>{
   beforeAll(()=>{
     passportStub.install(app);
@@ -39,6 +40,7 @@ describe('/login',()=>{
   })
 })
 
+//目標ページのテスト
 describe('/goal',()=>{
   beforeAll(()=>{
     passportStub.install(app);
