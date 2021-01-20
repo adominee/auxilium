@@ -15,6 +15,7 @@ var Reference=require('./models/reference');
 var Subject=require('./models/subject');
 var Color=require('./models/color');
 var Goal=require('./models/goal');
+
 //リレーションの作成
 User.sync().then(async ()=>{
     Subject.belongsTo(User,{foreignKey:'userId'});

@@ -12,7 +12,7 @@ block content
       h5 教科
       each subject in subjects
         p #{subject.subjectName}
-        input(type="radio", name="subjectChoice" value=subject.subjectName)
+        input(type="radio", name="subjectChoice" value=subject.subjectId)
       p 未分類
-      input(type="radio", name="subjectChoice" value="未分類")
+      input(type="radio", name="subjectChoice" value="notCategorize")
     button(type="submit") 参考書を追加

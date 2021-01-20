@@ -24,10 +24,6 @@ const Reference=loader.database.define(
       allowNull:true
     },
     subjectId:{
-      type:Sequelize.INTEGER,
-      allowNull:true
-    },
-    goalId:{
       type:Sequelize.UUID,
       allowNull:true
     }
