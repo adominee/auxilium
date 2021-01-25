@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    //-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
+    //-script(type="module" src="/javascript/color-picker.js")
+  body
+    form(action="/subject", method="post")
+      div
+        h5 教科名
+        input(type="text", name="subjectName" required)
+      div
+        h5 教科の色
+        input(type="color", name="subjectColor")
+        //-#colorPicker
+      button(type="submit") 教科を追加
+      //-<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+      //-script(src="/javascript/color-picker.js")

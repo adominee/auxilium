@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  form(action="/goal", method="post")
+    div
+      h5 目標名
+      input(type="text", name="goalName")
+    div
+      h5 締め切り
+      input(type="date", name="deadline")
+    div
+      h5 コメント
+      textarea(name="comment", cols="30", rows="10")
+    button(type="submit") 目標を追加

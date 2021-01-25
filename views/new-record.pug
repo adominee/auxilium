@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  form(action="/record", method="post")
+    div
+      h5  日時
+      input(type="datetime-local", name="recordDate",required)
+    div
+      h5 時間
+      br
+      input(type="number", name="recordHour", min="0", max="99")
+      p 時間
+      input(type="number", name="recordMinute", min="0",max="59")
+      p 分
+    div
+      h5 参考書
+    div
+      h5 ページ・問題の区間
+      input(type="number", name="recordStarted")
+      p ~
+      input(type="number", name="recordEnded")
+    div
+      h5 メモ
+      textarea(name="recordMemo", cols="30", rows="10")
+    div
+      h5 作成
+      button(type="submit") 記録を作成

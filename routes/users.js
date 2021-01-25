@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  res.send(process.env.GITHUB_CLIENT_ID);
 });
 
 module.exports = router;
