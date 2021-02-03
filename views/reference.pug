@@ -1,7 +1,18 @@
 extends layout
 
 block content
-  h4 #{reference.referenceName}
-  h4 #{reference.referenceNumber}
-  if subject
-    h4 #{subject.subjectName}
+  h1.mt-5.border-bottom #{reference.referenceName}
+  .container.my-5
+    .row.my-4
+      .col-sm
+        h2 問題数・ページ数
+      .col-sm
+        h2 #{reference.referenceNumber}
+    .row.my-4
+      .col-sm
+        h2 科目
+      .col-sm
+        if reference.subject
+          h2 #{reference.subject.subjectName}
+        else
+          h2 未分類

@@ -2,7 +2,34 @@ doctype html
 html
   head
     title Auxilium
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel="stylesheet",
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm",
+    crossorigin="anonymous")
+    //-script(src="/javascripts/bundle.js")
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    a(href="/") ホームへ戻る
-    block content
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      .collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.active
+            a(href="/").navbar-brand.nav-link Auxilium
+          li.nav-item
+            a(href="/record/table").navbar-brand.nav-link 記録一覧
+          li.nav-item
+            a(href="/reference/table").navbar-brand.nav-link 参考書一覧
+          li.nav-item
+            a(href="/subject/table").navbar-brand.nav-link 教科一覧
+          li.nav-item
+            a(href="/goal/table").navbar-brand.nav-link 目標一覧
+      ul.navbar-nav
+        if user
+          li.nav-item
+            a(href="/logout").nav-link #{user.username} をログアウト
+        else 
+          li.nav-item
+            a(href="/login").nav-link ログイン
+    .container
+      block content

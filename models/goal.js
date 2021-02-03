@@ -1,8 +1,8 @@
 'use strict';
-const loader=require('./sequelize-loader');
-const Sequelize=loader.Sequelize;
+const Sequelize=require('sequelize');
+const dbConfig=require('./db-config');
 
-const Goal=loader.database.define(
+const Goal=dbConfig.define(
   'goal',
   {
     goalId:{

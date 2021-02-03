@@ -1,8 +1,8 @@
 'use strict';
-const loader=require('./sequelize-loader');
-const Sequelize=loader.Sequelize;
+const Sequelize=require('sequelize');
+const dbConfig=require('./db-config');
 
-const Reference=loader.database.define(
+const Reference=dbConfig.define(
   'reference',
   {
     referenceId:{

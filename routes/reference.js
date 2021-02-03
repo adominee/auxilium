@@ -10,7 +10,6 @@ const router=express.Router();
 const Reference=require('../models/reference');
 const Subject=require('../models/subject');
 const Goal=require('../models/goal');
-const { sub } = require('date-fns');
 
 //参考書の新規追加
 router.get('/new',authenticationEnsurer,(req,res,next)=>{
@@ -34,7 +33,7 @@ router.get('/table',authenticationEnsurer,(req,res,next)=>{
         userId:req.user.id
       }
     }).then(references=>{
-      res.render('reference-table',{
+      res.render('table-reference',{
         user:req.user,
         references:references
       });
@@ -59,17 +58,7 @@ router.get('/:referenceId',authenticationEnsurer,(req,res,next)=>{
       next(err);
       return ;
     }
-    Subject.findOne({
-      where:{
-        subjectId:reference.subjectId
-      }
-    }).then(subject=>{
-      if(subject){
-        res.render('reference',{user:req.user,reference:reference,subject:subject});
-      }else{
-        res.render('reference',{user:req.user,reference:reference});
-      }
-    })
+    res.render('reference',{user:req.user,reference:reference});
   })
 })
 

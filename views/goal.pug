@@ -1,6 +1,18 @@
 extends layout
 
 block content
-  h4 #{goal.goalName}
-  h4 #{goal.deadline}
-  p(style="white-space:pre;") #{goal.comment}
+  h1.mt-5.border-bottom #{goal.goalName}
+  .container.my-5
+    .row.my-4
+      .col-sm
+        h2 締め切り日時
+      .col-sm
+        h2 #{goal.formattedDeadline}
+    .row.my-4
+      .col-sm
+        h2 メモ欄
+      .col-sm
+        if goal.comment
+          p.text-center #{goal.comment}
+        else
+          p.text-left 記載がなかったよ

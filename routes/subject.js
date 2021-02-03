@@ -16,20 +16,16 @@ router.get('/new',authenticationEnsurer,(req,res,next)=>{
 
 //教科の一覧表示
 router.get('/table',authenticationEnsurer,(req,res,next)=>{
-  if(req.user){
-    Subject.findAll({
-      where:{
-        userId:req.user.id
-      }
-    }).then(subjects=>{
-      res.render('subject-table',{
-        user:req.user,
-        subjects:subjects
-      })
+  Subject.findAll({
+    where:{
+      userId:req.user.id
+    }
+  }).then(subjects=>{
+    res.render('table-subject',{
+      user:req.user,
+      subjects:subjects
     })
-  }else{
-    res.render('subject-table',{user:req.user});
-  }
+  })
 })
 
 //教科の個別表示

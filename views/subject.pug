@@ -1,4 +1,12 @@
 extends layout
 
 block content
-  h4 #{subject.subjectName}
+  h1.mt-5.border-bottom #{subject.subjectName}
+  .container.my-5
+    .row.my-4
+      .col-sm-4
+        h2 科目のテーマ色
+      #colorSquare.col-sm-3
+      .col-sm-4
+        h2 #{subject.colorCode}
+  script(src="/javascripts/bundle.js" id="color" data-color=subject.colorCode)

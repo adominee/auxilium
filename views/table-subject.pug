@@ -3,15 +3,12 @@ extends layout
 block content
   if user
       div
-        a(href="/logout") #{user.username} をログアウト
-      div
-        a(href="/subject/new") 教科を追加する
-      - var hasSubject=subjects.length>0
-      if hasSubject
+        a(href="/subject/new").btn.btn-primary.my-5 教科を追加する
+      if subjects.length>0
         h3 教科一覧
         table.table
           tr
-            th 教科名
+            th.text-center 教科名
           each subject in subjects
             tr
               td

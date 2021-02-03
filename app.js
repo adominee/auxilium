@@ -13,9 +13,7 @@ var User=require('./models/user');
 var Record=require('./models/record');
 var Reference=require('./models/reference');
 var Subject=require('./models/subject');
-var Color=require('./models/color');
 var Goal=require('./models/goal');
-
 //リレーションの作成
 User.sync().then(async ()=>{
     Subject.belongsTo(User,{foreignKey:'userId'});
@@ -34,8 +32,8 @@ User.sync().then(async ()=>{
 //GitHubを利用した外部認証
 var GitHubStrategy=require('passport-github2').Strategy;
 var GITHUB_CLIENT_ID=process.env.GITHUB_CLIENT_ID;
-var GITHUB_CLIENT_SECRET=process.env.GITHUB_CLIENT_SECRET;
-var SESSION_SECRET='c53d016adf44e40a';
+var GITHUB_SECRETS=process.env.GITHUB_SECRETS;
+var SESSION_SECRET='c43d016adf44e40a';
 
 passport.serializeUser((user,done)=>{
   done(null,user);
@@ -47,16 +45,18 @@ passport.deserializeUser((obj,done)=>{
 
 passport.use(new GitHubStrategy({
   clientID:GITHUB_CLIENT_ID,
-  clientSecret:GITHUB_CLIENT_SECRET,
+  clientSecret:GITHUB_SECRETS,
   callbackURL:'http://localhost:8000/auth/github/callback'
 },
   (accessToken,refreshToken,profile,done)=>{
-    User.upsert({
-      userId:profile.id,
-      username:profile.username
-    }).then(()=>{
-      done(null,profile);
-    });
+    process.nextTick(function(){
+      User.upsert({
+        userId:profile.id,
+        username:profile.username
+      }).then(()=>{
+        done(null,profile);
+      })
+    })
   }
 ))
 
@@ -68,8 +68,6 @@ var recordRouter=require('./routes/record');
 var referenceRouter=require('./routes/reference');
 var subjectRouter=require('./routes/subject');
 var goalRouter=require('./routes/goal');
-const { access } = require('fs');
-const { sub } = require('date-fns');
 
 var app = express();
 app.use(helmet());

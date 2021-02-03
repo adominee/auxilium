@@ -1,14 +1,14 @@
 extends layout
 
 block content
-  form(action="/goal", method="post")
-    div
-      h5 目標名
-      input(type="text", name="goalName")
-    div
-      h5 締め切り
-      input(type="date", name="deadline")
-    div
-      h5 コメント
-      textarea(name="comment", cols="30", rows="10")
-    button(type="submit") 目標を追加
+  form(action="/goal", method="post").my-5
+    .form-group.row
+      label(for="inputName").col-sm-2.col-form-label.text-center 目標名
+      .col-sm-10
+        input(type="text" name="goalName" id="inputName").form-control
+    .form-group.row
+      label(for="inputDate").col-sm-2.col-form-label.text-center 締め切り日時
+      .col-sm-10
+        input(type="date" name="deadline").form-control
+    .form-group.row
+      button(type="submit").btn.btn-primary.col-sm-2 目標を作成
