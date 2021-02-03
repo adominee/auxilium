@@ -4,15 +4,14 @@ block content
   if user
       div
         a(href="/subject/new").btn.btn-primary.my-5 教科を追加する
-      if subjects.length>0
-        h3 教科一覧
-        table.table
+      h3 教科一覧
+      table.table
+        tr
+          th.text-center 教科名
+        each subject in subjects
           tr
-            th.text-center 教科名
-          each subject in subjects
-            tr
-              td
-                a(href=`/subject/${subject.subjectId}`) #{subject.subjectName}
+            td
+              a(href=`/subject/${subject.subjectId}`) #{subject.subjectName}
   else
     div
       a(href="/login") ログイン
