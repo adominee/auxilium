@@ -42,7 +42,7 @@
     "webpack-cli": "^4.4.0"
   },
   "engines": {
-    "node": "15.7.0",
+    "node": "12.x",
     "yarn":"1.x"
   }
 }
