@@ -5,17 +5,16 @@ block content
     if user
       div
         a(href="/goal/new").btn.btn-primary.my-5 目標を作る
-      if goals.length>0
-        h3 目標一覧
-        table.table
+      h3 目標一覧
+      table.table
+        tr
+          th.text-center 目標名
+          th.text-center 締切日
+        each goal in goals
           tr
-            th.text-center 目標名
-            th.text-center 締切日
-          each goal in goals
-            tr
-              td
-                a(href=`/goal/${goal.goalId}`) #{goal.goalName}
-              td.text-center #{goal.formattedDeadline}
+            td
+              a(href=`/goal/${goal.goalId}`) #{goal.goalName}
+            td.text-center #{goal.formattedDeadline}
     else
       div
         a(href="/login") ログイン
