@@ -32,7 +32,7 @@ User.sync().then(async ()=>{
 //GitHubを利用した外部認証
 var GitHubStrategy=require('passport-github2').Strategy;
 var GITHUB_CLIENT_ID=process.env.GITHUB_CLIENT_ID;
-var GITHUB_SECRETS=process.env.GITHUB_SECRETS;
+var GITHUB_SECRETS=process.env.GITHUB_CLIENT_SECRET;
 var SESSION_SECRET='c43d016adf44e40a';
 
 passport.serializeUser((user,done)=>{
@@ -46,7 +46,7 @@ passport.deserializeUser((obj,done)=>{
 passport.use(new GitHubStrategy({
   clientID:GITHUB_CLIENT_ID,
   clientSecret:GITHUB_SECRETS,
-  callbackURL:'http://localhost:8000/auth/github/callback'
+  callbackURL: process.env.HEROKU_URL ? process.env.HEROKU_URL+'auth/github/callback' : 'http://localhost:8000/auth/github/callback'
 },
   (accessToken,refreshToken,profile,done)=>{
     process.nextTick(function(){
