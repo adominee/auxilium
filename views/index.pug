@@ -1,20 +1,12 @@
 extends layout
 
 block content
-  h1 Auxilium
-  p Welcome to Auxilium
+  .jumbotron.my-3
+    h1.display-4 Auxilium
+    p.lead Auxiliumは学習時間の管理と計画が出来るサービスです。
   div
     if user
-      div
-        a(href="/logout") #{user.username} をログアウト
-        br
-        a(href="/record/table") 記録一覧
-        br
-        a(href="/reference/table") 参考書一覧
-        br
-        a(href="/subject/table") 教科一覧
-        br
-        a(href="/goal/table") 目標一覧
+      
     else
       div
         a(href="/login") ログイン

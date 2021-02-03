@@ -1,27 +1,37 @@
 extends layout
+include components/csrf
 
 block content
-  form(action="/record", method="post")
-    div
-      h5  日時
-      input(type="datetime-local", name="recordDate",required)
-    div
-      h5 時間
-      br
-      input(type="number", name="recordHour", min="0", max="99")
-      p 時間
-      input(type="number", name="recordMinute", min="0",max="59")
-      p 分
-    div
-      h5 参考書
-    div
-      h5 ページ・問題の区間
-      input(type="number", name="recordStarted")
-      p ~
-      input(type="number", name="recordEnded")
-    div
-      h5 メモ
-      textarea(name="recordMemo", cols="30", rows="10")
-    div
-      h5 作成
-      button(type="submit") 記録を作成
+  h1.my-5.text-center 記録の作成
+  form(action="/record", method="post").my-5
+    +csrf(csrfToken)
+    .form-group.row
+      label(for="inputDate" value=iso).col-sm-2.col-form-label.text-center 日時
+      .col-sm-10
+        input(type="datetime-local" name="recordDate" id="inputDate" value=iso required).form-control
+    .form-group.row
+      label(for="inputMinute").col-sm-2.col-form-label.text-center 学習時間(分)
+      .col-sm-10
+        input(type="number",name="recordMinute",id="inputMinute",min="0",max="1440").form-control
+    .form-group.row
+      label(for="inputReference").col-sm-2.col-form-label.text-center 参考書
+      .col-sm-10
+        select(name="referenceChoice" id="inputReference").custom-select.mr-sm-2
+          if references
+            each reference in references
+              option(value=reference.referenceId) #{reference.referenceName}
+          option(value="'notCategorize") 未登録
+    .form-group.row
+      label(for="inputRange").col-sm-2.col-form-label.text-center 学習範囲
+      .col-sm-2
+        input(type="number" name="recordStarted")
+      .col-sm-2
+        h4.text-center ~
+      .col-sm-2
+        input(type="number" name="recordEnded")
+    .form-group.row
+      label(for="inputMemo").col-sm-2.col-form-label.text-center メモ
+      .col-sm-10
+        textarea(name="recordMemo", id="inputMemo", cols="30", rows="10").form-control
+    .form-group.row
+      button(type="submit").btn.btn-primary.col-sm-2 記録を作成

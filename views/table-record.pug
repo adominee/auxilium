@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  if user
+    div
+      a(href="/record/new").btn.btn-primary.my-5 記録を追加する
+    div
+      h3.my-4 #{message}
+      if records.length>0
+      h3.my-4 記録一覧
+      table.table
+        tr
+          th.text-center 学習日時
+          th.text-center 学習時間(分)
+          th.text-center 問題数・ページ数
+          th.text-center メモ
+        each record in records
+          tr
+            td
+              a(href=`/record/${record.recordId}`) #{record.formattedRecordedAt}
+              th.text-center #{record.time}
+              if record.startedAt ||record.endedAt
+                th.text-center #{record.startedAt} ~ #{record.endedAt}
+              else
+                th.text-center -
+              if record.memo
+                th.text-center #{record.memo}
+              else
+                th.text-center -

@@ -1,0 +1,15 @@
+include csrf
+
+mixin deleteModal(title ,modelName,id)
+  div(id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true").modal.fade
+    div(role="document").modal-dialog
+      .modal-content
+        .modal-header
+          h4(id="deleteModalLabel").modal-title #{title}の削除
+        .modal-body
+          p 削除します。よろしいですか？
+        .modal-footer
+          button(data-dismiss="modal").btn.btn-secondary 閉じる
+          form(action=`/${modelName}/${id}?delete=1`, method="post")
+            +csrf(csrfToken)
+            button(type="submit").btn.btn-danger 削除する

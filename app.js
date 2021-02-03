@@ -13,9 +13,7 @@ var User=require('./models/user');
 var Record=require('./models/record');
 var Reference=require('./models/reference');
 var Subject=require('./models/subject');
-var Color=require('./models/color');
 var Goal=require('./models/goal');
-
 //リレーションの作成
 User.sync().then(async ()=>{
     Subject.belongsTo(User,{foreignKey:'userId'});
@@ -28,14 +26,14 @@ User.sync().then(async ()=>{
     Record.belongsTo(User,{foreignKey:'userId'});
     Record.belongsTo(Reference,{foreignKey:'referenceId'});
     Record.belongsTo(Subject,{foreignKey:'subjectId'});
-    Record.sync();
+    await Record.sync();
 });
 
 //GitHubを利用した外部認証
 var GitHubStrategy=require('passport-github2').Strategy;
 var GITHUB_CLIENT_ID=process.env.GITHUB_CLIENT_ID;
-var GITHUB_CLIENT_SECRET=process.env.GITHUB_CLIENT_SECRET;
-var SESSION_SECRET='c53d016adf44e40a';
+var GITHUB_SECRETS=process.env.GITHUB_CLIENT_SECRET;
+var SESSION_SECRET='c43d016adf44e40a';
 
 passport.serializeUser((user,done)=>{
   done(null,user);
@@ -47,16 +45,18 @@ passport.deserializeUser((obj,done)=>{
 
 passport.use(new GitHubStrategy({
   clientID:GITHUB_CLIENT_ID,
-  clientSecret:GITHUB_CLIENT_SECRET,
-  callbackURL:'http://localhost:8000/auth/github/callback'
+  clientSecret:GITHUB_SECRETS,
+  callbackURL: process.env.HEROKU_URL ? process.env.HEROKU_URL+'auth/github/callback' : 'http://localhost:8000/auth/github/callback'
 },
   (accessToken,refreshToken,profile,done)=>{
-    User.upsert({
-      userId:profile.id,
-      username:profile.username
-    }).then(()=>{
-      done(null,profile);
-    });
+    process.nextTick(function(){
+      User.upsert({
+        userId:profile.id,
+        username:profile.username
+      }).then(()=>{
+        done(null,profile);
+      })
+    })
   }
 ))
 
@@ -68,8 +68,6 @@ var recordRouter=require('./routes/record');
 var referenceRouter=require('./routes/reference');
 var subjectRouter=require('./routes/subject');
 var goalRouter=require('./routes/goal');
-const { access } = require('fs');
-const { sub } = require('date-fns');
 
 var app = express();
 app.use(helmet());
@@ -106,7 +104,17 @@ app.get('/auth/github',
 app.get('/auth/github/callback',
   passport.authenticate('github',{failiureRedirect:'/login'}),
   (req,res)=>{
-    res.redirect('/');
+    var loginFrom=req.cookies.loginFrom;
+    //オープンリダイレクタ脆弱性対策
+    if(loginFrom &&
+        !loginFrom.includes('http://')&&
+        !loginFrom.includes('https://')
+      ){
+        res.clearCookie('loginFrom');
+        res.redirect(loginFrom);
+    }else{
+      res.redirect('/');
+    }
   }
 )
 

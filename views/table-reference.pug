@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  if user
+    div
+      a(href="/reference/new").btn.btn-primary.my-5 参考書を追加する
+    div
+      if references.length>0
+        h3.mb-4 参考書一覧
+        table.table
+          tr
+            th.text-center 参考書名
+            th.text-center 問題数・ページ数
+            th.text-center 教科
+          each reference in references
+            tr
+              td
+                a(href=`/reference/${reference.referenceId}`) #{reference.referenceName}
+                if reference.referenceNumber
+                  th.text-center #{reference.referenceNumber}
+                else
+                  th.text-center -
+                if reference.Subject
+                  th.text-center #{reference.Subject.subjectName}
+                else
+                  th.text-center -

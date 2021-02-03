@@ -1,6 +1,26 @@
 extends layout
+include components/delete-modal
 
 block content
-  h4 #{goal.goalName}
-  h4 #{goal.deadline}
-  p(style="white-space:pre;") #{goal.comment}
+  h1.mt-5.border-bottom #{goal.goalName}
+  a(href=`/goal/${goal.goalId}/edit`).btn.btn-primary 編集
+  button(
+    type="button"
+    data-toggle="modal"
+    data-target="#deleteModal"
+  ).btn.btn-danger 削除
+  .container.my-5
+    .row.my-4
+      .col-sm
+        h2 締め切り日時
+      .col-sm
+        h2 #{goal.formattedDeadline}
+    .row.my-4
+      .col-sm
+        h2 メモ欄
+      .col-sm
+        if goal.comment
+          p.text-center #{goal.comment}
+        else
+          p.text-left 記載がなかったよ
+  +deleteModal("目標","goal",goal.goalId)

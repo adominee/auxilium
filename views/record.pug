@@ -1,0 +1,39 @@
+extends layout
+include components/delete-modal
+
+block content
+  h1.mt-5.border-bottom #{record.formattedRecordedAt} の学習記録
+  a(href=`/record/${record.recordId}/edit`).btn.btn-primary 編集
+  button(
+    type="button"
+    data-toggle="modal"
+    data-target="#deleteModal"
+  ).btn.btn-danger 削除
+  .container.my-5
+    .row.my-4
+      .col-sm
+        h2 学習時間
+      .col-sm
+        h2 #{record.time}分
+    .row.my-4
+      .col-sm
+        h2 参考書
+      .col-sm
+        if record.reference
+          h2 #{record.reference.referenceName}
+        else
+          h2 登録なし
+    if record.memo
+      .row.my-4
+        .col-sm
+          h2 メモ
+      .row.my-2
+        .col-sm  
+          h4 #{record.memo}
+    if record.startedAt || record.endedAt
+      .row.my-4
+        .col-sm
+          h2 学習範囲
+        .col-sm
+          h4 #{record.startedAt} ~ #{record.endedAt}
+  +deleteModal("記録","record",record.recordId)

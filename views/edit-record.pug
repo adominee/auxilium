@@ -1,0 +1,34 @@
+extends layout
+include components/csrf
+
+block content
+  h1.my-5.text-center 記録の編集
+  form(action=`/record/${record.recordId}?edit=1`, method="post").my-5
+    +csrf(csrfToken)
+    .form-group.row
+      label(for="inputDate").col-sm-2.col-form-label.text-center 日時
+      .col-sm-10
+        input(type="datetime-local" name="recordDate" id="inputDate" value=record.formattedRecordedAt required).form-control
+    .form-group.row
+      label(for="inputMinute").col-sm-2.col-form-label.text-center 学習時間(分)
+      .col-sm-10
+        input(type="number" name="recordMinute" id="inputMinute" min="0" max="1440" value=record.time).form-control
+    .form-group.row
+      label(for="inputReference").col-sm-2.col-form-label.text-center 参考書
+      .col-sm-10
+        select(id="inputReference").custom-select.mr-sm-2
+          each reference in references
+            if record.reference && (reference.referenceId == record.reference.referenceId)
+              option(value=reference.referenceId selected) #{reference.referenceName}
+            else
+              option(value=reference.referenceId) #{reference.referenceName}
+          if !record.reference
+            option(value="notCategorize" selected) 未登
+          else
+            option(value="notCategorize") 未登録
+    .form-group.row
+      label(for="inputMemo").col-sm-2.col-form-label.text-center メモ
+      .col-sm-10
+        textarea(name="recordMemo", id="inputMemo", cols="30", rows="10").form-control
+    .form-group.row
+      button(type="submit").btn.btn-primary.col-sm-2 記録を編集

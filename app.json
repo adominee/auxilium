@@ -1,0 +1,7 @@
+{
+  "name":"Auxilium",
+  "description":"目標に向けて頑張る人を応援するためのアプリ",
+  "logo":"",
+  "keywords":["node"],
+  "image":"heroku/nodejs"
+}
