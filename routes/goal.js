@@ -9,14 +9,14 @@ const router=express.Router();
 
 //データモデルのimport
 const Goal=require('../models/goal');
-const { generateError, isMine} = require('./module');
+const { generateError, isMine, csrfProtection} = require('./module');
 
-router.get('/new',authenticationEnsurer,(req,res,next)=>{
+router.get('/new',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   res.render('new-goal',{user:req.user});
 });
 
 //目標の一覧表示
-router.get('/table',authenticationEnsurer,(req,res,next)=>{
+router.get('/table',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Goal.findAll({
     where:{
       userId:req.user.id
@@ -27,14 +27,15 @@ router.get('/table',authenticationEnsurer,(req,res,next)=>{
     })
     res.render('table-goal',{
       user:req.user,
-      goals:goals
+      goals:goals,
+      csrfToken:req.csrfToken()
     });
   });
 })
 
 //目標の個別表示
 //TODO 目標所属の参考書を表示
-router.get('/:goalId',authenticationEnsurer,(req,res,next)=>{
+router.get('/:goalId',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Goal.findOne({
     where:{
       goalId:req.params.goalId
@@ -49,13 +50,14 @@ router.get('/:goalId',authenticationEnsurer,(req,res,next)=>{
     goal.formattedDeadline=dateFormat(goal.deadline);
     res.render('goal',{
       user:req.user,
-      goal:goal
+      goal:goal,
+      csrfToken:req.csrfToken()
     })
   });
 });
 
 //目標の編集ページ表示
-router.get('/:goalId/edit',authenticationEnsurer,(req,res,next)=>{
+router.get('/:goalId/edit',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Goal.findOne({
     where:{
       userId:req.user.id,
@@ -72,7 +74,8 @@ router.get('/:goalId/edit',authenticationEnsurer,(req,res,next)=>{
     goal.formattedDeadline=format(new Date(goal.deadline),'yyyy-MM-dd');
     res.render('edit-goal',{
       user:req.user,
-      goal:goal
+      goal:goal,
+      csrfToken:req.csrfToken()
     });
   });
 });

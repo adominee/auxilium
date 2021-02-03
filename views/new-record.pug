@@ -1,8 +1,10 @@
 extends layout
+include components/csrf
 
 block content
   h1.my-5.text-center 記録の作成
   form(action="/record", method="post").my-5
+    +csrf(csrfToken)
     .form-group.row
       label(for="inputDate" value=iso).col-sm-2.col-form-label.text-center 日時
       .col-sm-10

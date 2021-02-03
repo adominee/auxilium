@@ -8,7 +8,7 @@ const router=express.Router();
 
 //データモデルのimport
 const Subject=require('../models/subject');
-const { generateError, isMine } = require('./module');
+const { generateError, isMine ,csrfProtection} = require('./module');
 
 //教科作成ページ
 router.get('/new',authenticationEnsurer,(req,res,next)=>{
@@ -16,7 +16,7 @@ router.get('/new',authenticationEnsurer,(req,res,next)=>{
 })
 
 //教科の一覧表示
-router.get('/table',authenticationEnsurer,(req,res,next)=>{
+router.get('/table',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Subject.findAll({
     where:{
       userId:req.user.id
@@ -24,20 +24,24 @@ router.get('/table',authenticationEnsurer,(req,res,next)=>{
   }).then(subjects=>{
     res.render('table-subject',{
       user:req.user,
-      subjects:subjects
+      subjects:subjects,
+      csrfToken:req.csrfToken()
     })
   })
 })
 
 //教科の個別表示
-router.get('/:subjectId',authenticationEnsurer,(req,res,next)=>{
+router.get('/:subjectId',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Subject.findOne({
     where:{
       subjectId:req.params.subjectId
     }
   }).then(subject=>{
     if(subject){
-      res.render('subject',{subject:subject});
+      res.render('subject',{
+        subject:subject,
+        csrfToken:req.csrfToken()
+      });
     }else{
       const err=new Error('指定された目標は存在しません');
       err.status=404;
@@ -47,7 +51,7 @@ router.get('/:subjectId',authenticationEnsurer,(req,res,next)=>{
 })
 
 //科目の編集ページ表示
-router.get('/:subjectId/edit',authenticationEnsurer,(req,res,next)=>{
+router.get('/:subjectId/edit',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Subject.findOne({
     where:{
       userId:req.user.id,
@@ -65,13 +69,14 @@ router.get('/:subjectId/edit',authenticationEnsurer,(req,res,next)=>{
     }
     res.render('edit-subject',{
       user:req.user,
-      subject:subject
+      subject:subject,
+      csrfToken:req.csrfToken()
     })
   })
 })
 
 //教科のDB保存
-router.post('/',authenticationEnsurer,(req,res,next)=>{
+router.post('/',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   const subjectId=uuid.v4();
   Subject.create({
     subjectId:subjectId,
@@ -84,7 +89,7 @@ router.post('/',authenticationEnsurer,(req,res,next)=>{
 })
 
 //科目の更新と削除
-router.post('/:subjectId',authenticationEnsurer,(req,res,next)=>{
+router.post('/:subjectId',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Subject.findOne({
     where:{
       userId:req.user.id,

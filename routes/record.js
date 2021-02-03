@@ -3,7 +3,7 @@
 const express=require('express');
 const uuid=require('uuid');
 const authenticationEnsurer=require('./authentication-ensurer');
-const {generateError,dateFormat,setNull,ISOFormat, isMine}=require('./module');
+const {generateError,dateFormat,setNull,ISOFormat,isMine,csrfProtection}=require('./module');
 
 const router=express.Router();
 
@@ -12,19 +12,19 @@ const Reference=require('../models/reference');
 const Record=require('../models/record');
 
 //記録作成ページ
-router.get('/new',authenticationEnsurer,(req,res,next)=>{
+router.get('/new',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Reference.findAll({
     where:{
       userId:req.user.id
     }
   }).then(references=>{
     const iso=ISOFormat(new Date);
-    res.render('new-record',{references:references,iso:iso});
+    res.render('new-record',{references:references,iso:iso,csrfToken:req.csrfToken()});
   })
 })
 
 //記録一覧表示
-router.get('/table',authenticationEnsurer,(req,res,next)=>{
+router.get('/table',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Record.findAll({
     where:{
       userId:req.user.id
@@ -36,13 +36,14 @@ router.get('/table',authenticationEnsurer,(req,res,next)=>{
     })
     res.render('table-record',{
       user:req.user,
-      records:records
+      records:records,
+      csrfToken:req.csrfToken()
     });
   })
 })
 
 //記録の個別表示
-router.get('/:recordId',authenticationEnsurer,(req,res,next)=>{
+router.get('/:recordId',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Record.findOne({
     include:{
       model:Reference,
@@ -62,13 +63,14 @@ router.get('/:recordId',authenticationEnsurer,(req,res,next)=>{
     //console.log(record);
     res.render('record',{
       user:req.user,
-      record:record
+      record:record,
+      csrfToken:req.csrfToken
     })
   })
 })
 
 //記録の編集ページの表示
-router.get('/:recordId/edit',authenticationEnsurer,(req,res,next)=>{
+router.get('/:recordId/edit',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Record.findOne({
     include:{
       model:Reference,
@@ -97,14 +99,15 @@ router.get('/:recordId/edit',authenticationEnsurer,(req,res,next)=>{
       res.render('edit-record',{
         user:req.user,
         record:record,
-        references:references
+        references:references,
+        csrfToken:req.csrfToken()
       });
     })
   })
 })
 
 //記録保存
-router.post('/',authenticationEnsurer,(req,res,next)=>{
+router.post('/',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   console.log(req.body);
   isNull(req.body);
   console.log(req.body);
@@ -125,7 +128,7 @@ router.post('/',authenticationEnsurer,(req,res,next)=>{
 });
 
 //記録の更新と削除
-router.post('/:recordId',authenticationEnsurer,(req,res,next)=>{
+router.post('/:recordId',authenticationEnsurer,csrfProtection,(req,res,next)=>{
   Record.findOne({
     where:{
       userId:req.user.id,

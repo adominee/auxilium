@@ -2,6 +2,7 @@ extends layout
 
 block content
     .mx-auto.my-5.login
-        a(href="/auth/github").btn.btn-primary.btn-lg GitHubでログイン
-    if user
-        p 現在 #{user.username} でログイン中
+        if user
+            p 現在 #{user.username} でログイン中
+        else
+            a(href="/auth/github").btn.btn-primary.btn-lg GitHubでログイン

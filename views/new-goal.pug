@@ -1,7 +1,9 @@
 extends layout
+include components/csrf
 
 block content
   form(action="/goal", method="post").my-5
+    +csrf(csrfToken)
     .form-group.row
       label(for="inputName").col-sm-2.col-form-label.text-center 目標名
       .col-sm-10
