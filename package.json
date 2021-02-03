@@ -26,7 +26,8 @@
     "popper.js": "1.14.0",
     "pug": "2.0.0-beta11",
     "sequelize": "^6.5.0",
-    "uuid": "3.3.2"
+    "uuid": "3.3.2",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -42,6 +43,6 @@
     "webpack-cli": "^4.4.0"
   },
   "engines": {
-    "node":"15.7.0"
+    "node": "15.7.0"
   }
 }
