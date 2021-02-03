@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  form(action=`/reference/${reference.referenceId}?edit=1`, method="post").my-5
+    .form-group.row
+      label(for="inputName").col-sm-2.col-form-label.text-center 教材名
+      .col-sm-10
+        input(type="text" name="referenceName" id="inputName" value=reference.referenceName required).form-control
+    .form-group.row
+      label(for="inputNumber").col-sm-2.col-form-label.text-center 問題数・ページ数
+      .col-sm-10
+        input(type="number" name="referenceNumber" id="referenceName" min="1" max="2147483648" value=reference.referenceNumber).form-control
+    .form-group.row
+      label(for="inputSubject").col-sm-2.col-form-label.text-center 科目
+      .col-sm-10
+        select(id="inputSubject" name="subjectChoice").custom-select.mr-sm-2
+          each subject in subjects
+            if reference.Subject && (subject.subjectId == reference.Subject.subjectId)
+              option(value=subject.subjectId selected) #{subject.subjectName}
+            else
+              option(value=subject.subjectId) #{subject.subjectName}
+          if !reference.Subject
+            option(value="notCategorize" selected) 未分類
+          else
+            option(value="notCategorize") 未分類
+    .form-group.row
+      button(type="submit").btn.btn-primary.col-sm-2 教材を編集

@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 module.exports = {
   context: __dirname + '/app',
   mode: 'none',
@@ -17,7 +19,19 @@ module.exports = {
             presets: ['@babel/preset-env']
           }
         }
+      },{
+        test:/\.css$/,
+        use:['style-loader','css-loader']
       }
     ]
-  }
+  },
+  plugins: [
+    /* use jQuery as Global */
+    new webpack.ProvidePlugin({
+        jQuery: "jquery",
+        $: "jquery",
+        'window.jQuery': 'jquery',
+        Popper: ['popper.js', 'default'],
+    })
+  ],
 };

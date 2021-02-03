@@ -1,7 +1,15 @@
 extends layout
+include components/delete-modal
+
 
 block content
   h1.mt-5.border-bottom #{goal.goalName}
+  a(href=`/goal/${goal.goalId}/edit`).btn.btn-primary 編集
+  button(
+    type="button"
+    data-toggle="modal"
+    data-target="#deleteModal"
+  ).btn.btn-danger 削除
   .container.my-5
     .row.my-4
       .col-sm
@@ -16,3 +24,4 @@ block content
           p.text-center #{goal.comment}
         else
           p.text-left 記載がなかったよ
+  +deleteModal("目標","goal",goal.goalId)

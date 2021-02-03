@@ -9,6 +9,7 @@ const router=express.Router();
 
 //データモデルのimport
 const Goal=require('../models/goal');
+const { generateError, isMine} = require('./module');
 
 router.get('/new',authenticationEnsurer,(req,res,next)=>{
   res.render('new-goal',{user:req.user});
@@ -53,6 +54,29 @@ router.get('/:goalId',authenticationEnsurer,(req,res,next)=>{
   });
 });
 
+//目標の編集ページ表示
+router.get('/:goalId/edit',authenticationEnsurer,(req,res,next)=>{
+  Goal.findOne({
+    where:{
+      userId:req.user.id,
+      goalId:req.params.goalId
+    }
+  }).then(goal=>{
+    if(!goal){
+      next(generateError('notFound'));
+      return ;
+    }else if(!isMine(req.user.id,goal.userId)){
+      next(generateError('badRequest'));
+      return ;
+    }
+    goal.formattedDeadline=format(new Date(goal.deadline),'yyyy-MM-dd');
+    res.render('edit-goal',{
+      user:req.user,
+      goal:goal
+    });
+  });
+});
+
 //目標のDB保存
 router.post('/',authenticationEnsurer,(req,res,next)=>{
   const goalId=uuid.v4();
@@ -60,12 +84,48 @@ router.post('/',authenticationEnsurer,(req,res,next)=>{
     goalId:goalId,
     userId:req.user.id,
     deadline:req.body.deadline,
-    goalName:req.body.goalName.slice(0,255) || '名称未設定',
+    goalName:req.body.goalName.slice(0,255),
     comment:req.body.comment
   }).then((goal)=>{
     res.redirect('/goal/'+goal.goalId);
   })
 });
+
+//目標の更新と削除
+router.post('/:goalId',authenticationEnsurer,(req,res,next)=>{
+  Goal.findOne({
+    where:{
+      userId:req.user.id,
+      goalId:req.params.goalId
+    }
+  }).then(goal=>{
+    if(!goal){
+      next(generateError('notFound'));
+      return ;
+    }
+    if(isMine(req.user.id,goal.userId)){
+      console.log('本人だよ');
+      if(parseInt(req.query.edit)===1){
+        console.log('更新するよ');
+        goal.goalName=req.body.goalName.slice(0,255);
+        goal.deadline=req.body.deadline;
+        goal.comment=req.body.comment;
+        goal.save().then(goal=>{
+          res.redirect('/goal/'+goal.goalId);
+        })
+        return ;
+      }else if(parseInt(req.query.delete)===1){
+        console.log('削除するよ');
+        goal.destroy().then(()=>{
+          res.redirect('/goal/table');
+        })
+        return ;
+      }
+    }
+    next(generateError('badRequest'));
+    return ;
+  })
+})
 
 function dateFormat(date){
   return format(new Date(date),"yyyy年MM月dd日");

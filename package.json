@@ -7,7 +7,6 @@
     "test": "npx jest --testTimeout=10000 --forceExit"
   },
   "dependencies": {
-    "@simonwep/pickr": "^1.8.0",
     "add": "^2.0.6",
     "bootstrap": "4.0.0",
     "cookie-parser": "~1.4.3",

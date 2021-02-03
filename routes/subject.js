@@ -8,6 +8,7 @@ const router=express.Router();
 
 //データモデルのimport
 const Subject=require('../models/subject');
+const { generateError, isMine } = require('./module');
 
 //教科作成ページ
 router.get('/new',authenticationEnsurer,(req,res,next)=>{
@@ -45,16 +46,77 @@ router.get('/:subjectId',authenticationEnsurer,(req,res,next)=>{
   })
 })
 
+//科目の編集ページ表示
+router.get('/:subjectId/edit',authenticationEnsurer,(req,res,next)=>{
+  Subject.findOne({
+    where:{
+      userId:req.user.id,
+      subjectId:req.params.subjectId
+    }
+  }).then(subject=>{
+    if(!subject){
+      const err=generateError('notFound');
+      next(err);
+      return ;
+    }else if(!isMine(subject.userId,req.user.id)){
+      const err=generateError('badRequest');
+      next(err);
+      return ;
+    }
+    res.render('edit-subject',{
+      user:req.user,
+      subject:subject
+    })
+  })
+})
+
 //教科のDB保存
 router.post('/',authenticationEnsurer,(req,res,next)=>{
   const subjectId=uuid.v4();
   Subject.create({
     subjectId:subjectId,
     userId:req.user.id,
-    subjectName:req.body.subjectName,
+    subjectName:req.body.subjectName.slice(0,255),
     colorCode:req.body.subjectColor
   }).then((subject)=>{
     res.redirect('/subject/'+subject.subjectId);
+  })
+})
+
+//科目の更新と削除
+router.post('/:subjectId',authenticationEnsurer,(req,res,next)=>{
+  Subject.findOne({
+    where:{
+      userId:req.user.id,
+      subjectId:req.params.subjectId
+    }
+  }).then(subject=>{
+    if(!subject){
+      const err=generateError('notFound');
+      next(err);
+      return ;
+    }
+    if(isMine(req.user.id,subject.userId)){
+      console.log('本人だよ');
+      if(parseInt(req.query.edit)===1){
+        console.log('更新するよ');
+        subject.subjectName=req.body.subjectName.slice(0,255);
+        subject.subjectColor=req.body.subjectColor
+        subject.save().then(subject=>{
+          res.redirect('/subject/'+subject.subjectId);
+        })
+        return ;
+      }else if(parseInt(req.query.delete)===1){
+        console.log('削除するよ');
+        subject.destroy().then(()=>{
+          res.redirect('/subject/table');
+        });
+        return ;
+      }
+    }
+    const err=generateError('badRequest');
+    next(err);
+    return ;
   })
 })
 

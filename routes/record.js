@@ -3,7 +3,7 @@
 const express=require('express');
 const uuid=require('uuid');
 const authenticationEnsurer=require('./authentication-ensurer');
-const {generateError,dateFormat,setNull,ISOFormat}=require('./module');
+const {generateError,dateFormat,setNull,ISOFormat, isMine}=require('./module');
 
 const router=express.Router();
 
@@ -18,7 +18,8 @@ router.get('/new',authenticationEnsurer,(req,res,next)=>{
       userId:req.user.id
     }
   }).then(references=>{
-    res.render('new-record',{references:references});
+    const iso=ISOFormat(new Date);
+    res.render('new-record',{references:references,iso:iso});
   })
 })
 
@@ -78,19 +79,20 @@ router.get('/:recordId/edit',authenticationEnsurer,(req,res,next)=>{
       recordId:req.params.recordId
     }
   }).then(record=>{
+    if(!record){
+      const err=generateError('notFound');
+      next(err);
+      return ;
+    }else if(!isMine(record.userId,req.user.id)){
+      const err=generateError('badRequest');
+      next(err);
+      return ;
+    }
     Reference.findAll({
       where:{
         userId:req.user.id
       }
     }).then(references=>{
-      if(!record){
-        const err=generateError('notFound');
-        next(err);
-        return ;
-      }else if(parseInt(record.userId)!=parseInt(req.user.id)){
-        const err=generateError('badRequest');
-        next(err);
-      }
       record.formattedRecordedAt=ISOFormat(record.recordedAt);
       res.render('edit-record',{
         user:req.user,
@@ -122,32 +124,46 @@ router.post('/',authenticationEnsurer,(req,res,next)=>{
   })
 });
 
-//記録の追記
+//記録の更新と削除
 router.post('/:recordId',authenticationEnsurer,(req,res,next)=>{
   Record.findOne({
     where:{
+      userId:req.user.id,
       recordId:req.params.recordId
     }
   }).then(record=>{
-    if(isMine(req,record)&&(parseInt(req.query.edit)===1)){
-      isNull(req.body);
-      const time=parseInt(req.body.recordMinute);
-      record.time=time;
-      record.referenceId=req.body.referenceChoice;
-      record.memo=req.body.recordMemo;
-      record.startedAt=req.body.recordStarted;
-      record.endedAt=req.body.recordEnded;
-      record.recordedAt=req.body.recordDate;
-      record.save().then(record=>{
-        res.redirect('/record/'+record.recordId);
-      }).catch(err=>{
-        console.err(err);
-        res.redirect('/error');
-      })
-    }else{
-      const err=generateError('badRequest');
+    if(!record){
+      const err=generateError('notFound');
       next(err);
+      return ;
     }
+    if(isMine(req.user.id,record.userId)){
+      console.log('本人だよ')
+      if(parseInt(req.query.edit)===1){
+        console.log('更新するよ')
+        isNull(req.body);
+        const time=parseInt(req.body.recordMinute);
+        record.time=time;
+        record.referenceId=req.body.referenceChoice;
+        record.memo=req.body.recordMemo,
+        record.startedAt=req.body.recordStarted;
+        record.endedAt=req.body.recordEnded;
+        record.recordedAt=req.body.recordDate;
+        record.save().then(record=>{
+          res.redirect('/record/'+record.recordId);
+        })
+        return ;
+      }else if(parseInt(req.query.delete)===1){
+        console.log('削除するよ')
+        record.destroy().then(()=>{
+          res.redirect('/record/table');
+        })
+        return ;
+      }
+    }
+    const err=generateError('badRequest');
+    next(err);
+    return ;
   })
 })
 
@@ -156,10 +172,6 @@ function isNull(body){
   body.recordStarted=setNull('',body.recordStarted);
   body.recordEnded=setNull('',body.recordEnded);
   body.recordMemo=setNull('',body.recordMemo);
-}
-
-function isMine(req,data){
-  return data && parseInt(data.userId) ===parseInt(req.user.id);
 }
 
 module.exports=router;

@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  form(action=`/subject/${subject.subjectId}?edit=1`, method="post").my-5
+    .form-group.row
+      label(for="inputSubject").col-sm-2.col-form-label.text-center 科目名
+      .col-sm-10
+        input(type="text" name="subjectName" id="inputSubject" value=subject.subjectName required).form-control
+    .form-group.row
+      label(for="inputColor").col-sm-2.col-form-label.text-center 科目のテーマ色
+      .col-sm-10
+        input(type="color" name="subjectColor" id="inputColor" value=subject.colorCode)
+    .form-group.row
+      button(type="submit").btn.btn-primary.col-sm-2 科目を編集

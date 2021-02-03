@@ -1,7 +1,14 @@
 extends layout
+include components/delete-modal
 
 block content
   h1.mt-5.border-bottom #{subject.subjectName}
+  a(href=`/subject/${subject.subjectId}/edit`).btn.btn-primary 編集
+  button(
+    type="button"
+    data-toggle="modal"
+    data-target="#deleteModal"
+  ).btn.btn-danger 削除
   .container.my-5
     .row.my-4
       .col-sm-4
@@ -10,3 +17,4 @@ block content
       .col-sm-4
         h2 #{subject.colorCode}
   script(src="/javascripts/bundle.js" id="color" data-color=subject.colorCode)
+  +deleteModal("科目","subject",subject.subjectId)

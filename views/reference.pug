@@ -1,7 +1,14 @@
 extends layout
+include components/delete-modal
 
 block content
   h1.mt-5.border-bottom #{reference.referenceName}
+  a(href=`/reference/${reference.referenceId}/edit`).btn.btn-primary 編集
+  button(
+    type="button"
+    data-toggle="modal"
+    data-target="#deleteModal"
+  ).btn.btn-danger 削除
   .container.my-5
     .row.my-4
       .col-sm
@@ -12,7 +19,8 @@ block content
       .col-sm
         h2 科目
       .col-sm
-        if reference.subject
-          h2 #{reference.subject.subjectName}
+        if reference.Subject
+          h2 #{reference.Subject.subjectName}
         else
           h2 未分類
+  +deleteModal("教材","reference",reference.referenceId)

@@ -5,8 +5,9 @@ block content
     div
       a(href="/record/new").btn.btn-primary.my-5 記録を追加する
     div
+      h3.my-4 #{message}
       if records.length>0
-      h3.mb-4 記録一覧
+      h3.my-4 記録一覧
       table.table
         tr
           th.text-center 学習日時

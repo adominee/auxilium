@@ -12,8 +12,9 @@ const errorObject={
   },
 }
 
-exports.generateError=function(selecter){
-  const object=errorObject[selecter];
+//TODO 指定されたワード以外が渡された時の処理
+exports.generateError=function(select){
+  const object=errorObject[select];
   const err=new Error(object.str);
   err.status=object.status
   return err;
@@ -30,4 +31,8 @@ exports.ISOFormat=function(data){
 exports.setNull=function(judge,variable){
   if(judge===variable)return null;
   else return variable;
+}
+
+exports.isMine=function(key1,key2){
+  return parseInt(key1) ===parseInt(key2);
 }

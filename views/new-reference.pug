@@ -13,25 +13,10 @@ block content
     .form-group.row
       label(for="inputSubject").col-sm-2.col-form-label.text-center 科目
       .col-sm-10
-        select(id="inputSubject").custom-select.mr-sm-2
+        select(id="inputSubject" name="subjectChoice").custom-select.mr-sm-2
           if subjects
             each subject in subjects
               option(value=subject.subjectId) #{subject.subjectName}
           option(value="notCategorize") 未分類
     .form-group.row
       button(type="submit").btn.btn-primary.col-sm-2 参考書を追加
-
-    //-div
-    //-  h5 参考書名
-    //-  input(type="text", name="referenceName" required)
-    //-div
-    //-  h5 問題数・ページ数
-    //-  input(type="number", name="referenceNumber", min="1",max="2147483648")
-    //-div
-    //-  h5 教科
-    //-  each subject in subjects
-    //-    p #{subject.subjectName}
-    //-    input(type="radio", name="subjectChoice" value=subject.subjectId)
-    //-  p 未分類
-    //-  input(type="radio", name="subjectChoice" value="notCategorize")
-    //-button(type="submit") 参考書を追加

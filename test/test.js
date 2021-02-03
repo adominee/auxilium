@@ -2,7 +2,7 @@
 const request=require('supertest');
 const app=require('../app');
 const passportStub=require('passport-stub');
-const {generateError,dateFormat,setNull, ISOFormat}=require('../routes/module');
+const {generateError,dateFormat,setNull, ISOFormat, isMine}=require('../routes/module');
 
 //ログインのテスト
 describe('/login',()=>{
@@ -65,12 +65,24 @@ describe('dateFormat関数',()=>{
 
 describe('ISOFormat関数',()=>{
   test('正しくISO8601フォーマットに変換できる',()=>{
-    expect(ISOFormat(new Date('2014-10-10T04:50:40Z'))).toBe('2014-10-10T13:50:40')
+    expect(ISOFormat('2014-10-10T04:50:40Z')).toBe('2014-10-10T13:50:40')
   })
 })
 
 describe('setNull関数',()=>{
   test('値が代入されていないものにnullを代入する',()=>{
     expect(setNull('AAAA','BBBB')).toBe('BBBB');
+  })
+})
+
+describe('isMine関数',()=>{
+  test('idが異なるならfalseを返す',()=>{
+    const a="111",b="121";
+    expect(isMine(a,b)).toBe(false);
+  })
+  
+  test('idが同じならtrueを返す',()=>{
+    const a="111",b="111";
+    expect(isMine(a,b)).toBe(true);
   })
 })

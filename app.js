@@ -26,7 +26,7 @@ User.sync().then(async ()=>{
     Record.belongsTo(User,{foreignKey:'userId'});
     Record.belongsTo(Reference,{foreignKey:'referenceId'});
     Record.belongsTo(Subject,{foreignKey:'subjectId'});
-    Record.sync();
+    await Record.sync();
 });
 
 //GitHubを利用した外部認証
