@@ -3,16 +3,25 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
     "test": "npx jest --testTimeout=10000 --forceExit",
-    "client": "webpack serve --config ./config/webpack.config.js --open --mode development",
-    "build": "webpack --config ./config/webpack.config.js --mode development",
+    "precommit": "lint-staged",
+    "lint": "eslint src --fix -c .eslintrc.js 'src/**/*.js'",
     "server": "nodemon src/server/server.js  --exec babel-node",
-    "dev": "concurrently \"npm run client\" \"npm run server\""
+    "client": "webpack serve --config ./config/webpack.dev.js",
+    "build": "webpack --config ./config/webpack.config.js --mode development",
+    "dev": "NODE_ENV=development concurrently \"yarn run client\" \"yarn run server\"",
+    "start": "NODE_ENV=production yarn run build && yarn run server"
+  },
+  "pre-commit": [
+    "lint-staged"
+  ],
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {
-    "@simonwep/pickr": "^1.8.0",
-    "add": "^2.0.6",
     "cookie-parser": "~1.4.3",
     "date-fns": "^2.16.1",
     "debug": "~2.6.9",
@@ -34,19 +43,28 @@
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
+    "@babel/eslint-parser": "^7.12.1",
+    "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "babel-loader": "^8.2.2",
     "concurrently": "^5.3.0",
     "css-loader": "^5.0.1",
+    "eslint": "^7.18.0",
+    "eslint-plugin-react": "^7.22.0",
     "html-webpack-plugin": "^4.5.1",
+    "husky": "^4.3.8",
     "jest": "25.1.0",
+    "lint-staged": "^10.5.3",
     "nodemon": "^2.0.7",
     "passport-stub": "1.1.1",
+    "prettier": "^2.2.1",
+    "react-router-dom": "^5.2.0",
     "style-loader": "^2.0.0",
     "supertest": "3.1.0",
     "webpack": "^5.19.0",
     "webpack-cli": "^4.4.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
   }
 }

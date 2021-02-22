@@ -1,4 +1,4 @@
-'use strict';
+
 
 function ensure(req,res,next){
   if(req.isAuthenticated()){
